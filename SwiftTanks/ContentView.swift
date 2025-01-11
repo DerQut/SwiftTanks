@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var mode: Int = 1
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Tanks!")
+        if mode == 1 {
+            GameView()
         }
-        .padding()
     }
 }
 
