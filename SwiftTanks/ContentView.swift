@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var mode: Int = 1
+    @State var isInMainMenu: Bool = false
     
     var body: some View {
-        if mode == 1 {
+        if isInMainMenu {
+            MainMenuView()
+        } else {
             GameView()
         }
     }
