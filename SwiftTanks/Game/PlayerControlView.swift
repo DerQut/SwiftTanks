@@ -10,14 +10,23 @@ import SwiftUI
 struct PlayerControlView: View {
     var body: some View {
         ZStack {
-            Color(.black)
+            Color(.gray)
             HStack {
+                JoyStickView()
+                    .offset(x: 75, y: 75)
+                Spacer()
                 Text("PlayerControlView")
-            }
+            }.padding()
         }
     }
 }
 
 #Preview {
-    PlayerControlView()
+    ZStack {
+        Color(.white)
+            .ignoresSafeArea()
+        PlayerControlView()
+            .opacity(0.5)
+            .frame(height: 200)
+    }
 }
