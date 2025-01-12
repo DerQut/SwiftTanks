@@ -15,32 +15,6 @@ struct JoyStickView: View {
     @GestureState private var startLocation: CGPoint? = nil
     
     private let bigCircleRadius: CGFloat = 75
-    
-    var simpleDrag: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                // Update the location based on the translation of the gesture
-                var newLocation = startLocation ?? location
-                newLocation.x += value.translation.width
-                newLocation.y += value.translation.height
-                
-                // Calculate the distance between the center of the blue circle and the new location
-                let distance = sqrt(pow(newLocation.x - location.x, 2) + pow(newLocation.y - location.y, 2))
-                
-                // Clamp the new location if it exceeds the radius of the blue circle
-                if distance > bigCircleRadius {
-                    let angle = atan2(newLocation.y - location.y, newLocation.x - location.x)
-                    newLocation.x = location.x + cos(angle) * bigCircleRadius
-                    newLocation.y = location.y + sin(angle) * bigCircleRadius
-                }
-                
-                self.location = newLocation
-                self.innerCircleLocation = newLocation // Update the green circle location
-            }
-            .updating($startLocation) { (value, startLocation, transaction) in
-                startLocation = startLocation ?? location
-            }
-    }
 
     var fingerDrag: some Gesture {
         DragGesture()
@@ -62,6 +36,7 @@ struct JoyStickView: View {
                 let newY = location.y + sin(angle) * clampedDistance
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
+                print(angleText, clampedDistance)
             }
             .updating($fingerLocation) { (value, fingerLocation, transaction) in
                 fingerLocation = value.location
@@ -92,7 +67,6 @@ struct JoyStickView: View {
                 .foregroundColor(.black)
                 .frame(width: bigCircleRadius * 2, height: bigCircleRadius * 2)
                 .position(location)
-                .gesture(simpleDrag)
             
             // Smaller circle (green circle)
             Circle()

@@ -17,7 +17,6 @@ struct GameView: View {
                 PlayerControlView()
                     .rotationEffect(.degrees(90))
                     .frame(height: 200)
-                    .frame(width: UIScreen.main.bounds.size.width/1.4)
                     .opacity(0.5)
                 
                 Spacer()
@@ -31,7 +30,6 @@ struct GameView: View {
                 PlayerControlView()
                     .rotationEffect(.degrees(-90))
                     .frame(height: 200)
-                    .frame(width: UIScreen.main.bounds.size.width/1.4)
                     .opacity(0.5)
             }
         }

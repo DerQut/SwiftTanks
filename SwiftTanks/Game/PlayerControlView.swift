@@ -13,10 +13,12 @@ struct PlayerControlView: View {
             Color(.gray)
             HStack {
                 JoyStickView()
-                    .offset(x: 75, y: 75)
+                    .offset(x: 83, y: 83)
                 Spacer()
                 Text("PlayerControlView")
-            }.padding()
+            }
+            .frame(width: UIScreen.main.bounds.size.width/1.5)
+            .padding()
         }
     }
 }
