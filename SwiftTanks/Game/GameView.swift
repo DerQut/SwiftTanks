@@ -14,7 +14,7 @@ struct GameView: View {
                 .ignoresSafeArea()
             
             HStack {
-                PlayerControlView()
+                PlayerControlView(forceAngleOffset: 0.0)
                     .rotationEffect(.degrees(90))
                     .frame(height: 200)
                     .opacity(0.5)
@@ -27,7 +27,7 @@ struct GameView: View {
                 Spacer()
                     .frame(width: UIScreen.main.bounds.size.width-200)
                 
-                PlayerControlView()
+                PlayerControlView(forceAngleOffset: .pi)
                     .rotationEffect(.degrees(-90))
                     .frame(height: 200)
                     .opacity(0.5)

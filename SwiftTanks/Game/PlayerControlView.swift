@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct PlayerControlView: View {
+    let forceAngleOffset: CGFloat
     var body: some View {
         ZStack {
             Color(.gray)
             HStack {
-                JoyStickView()
+                JoyStickView(forceAngleOffset: forceAngleOffset)
                     .offset(x: 83, y: 83)
                 Spacer()
                 Text("PlayerControlView")
@@ -27,7 +28,7 @@ struct PlayerControlView: View {
     ZStack {
         Color(.white)
             .ignoresSafeArea()
-        PlayerControlView()
+        PlayerControlView(forceAngleOffset: 0.0)
             .opacity(0.5)
             .frame(height: 200)
     }

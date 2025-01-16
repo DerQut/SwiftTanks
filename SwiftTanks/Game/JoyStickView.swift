@@ -15,6 +15,7 @@ struct JoyStickView: View {
     @GestureState private var startLocation: CGPoint? = nil
     
     private let bigCircleRadius: CGFloat = 75
+    let forceAngleOffset: CGFloat
 
     var fingerDrag: some Gesture {
         DragGesture()
@@ -49,7 +50,7 @@ struct JoyStickView: View {
     }
     
     var angleText: String {
-        let angle = atan2(innerCircleLocation.y - location.y, innerCircleLocation.x - location.x)
+        let angle = atan2(innerCircleLocation.y - location.y, innerCircleLocation.x - location.x) + self.forceAngleOffset
         var degrees = Int(-angle * 180 / .pi)
         
         // Convert the degrees to a positive value
@@ -82,7 +83,7 @@ struct JoyStickView: View {
     ZStack {
         Color(.white)
             .ignoresSafeArea()
-        PlayerControlView()
+        PlayerControlView(forceAngleOffset: 0.0)
             .opacity(0.5)
             .frame(height: 200)
     }
