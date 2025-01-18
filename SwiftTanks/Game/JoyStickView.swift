@@ -41,8 +41,7 @@ struct JoyStickView: View {
                 let newY = location.y + sin(angle) * clampedDistance
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
-                print(angleText, clampedDistance)
-                
+                print(angleText)
                 if globalData.players[playerDelegateID] != nil {
                     globalData.players[playerDelegateID]!.angle = Angle.degrees(Double(angleText) ?? 0)
                     globalData.players[playerDelegateID]!.velocity = globalData.players[playerDelegateID]!.maxSpeed * clampedDistance/75
@@ -84,7 +83,7 @@ struct JoyStickView: View {
             // Smaller circle (green circle)
             Circle()
                 .foregroundColor(.gray)
-                .frame(width: 50, height: 50)
+                .frame(width: 75, height: 75)
                 .position(innerCircleLocation)
                 .gesture(fingerDrag)
         }
