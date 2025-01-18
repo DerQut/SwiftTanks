@@ -15,13 +15,13 @@ enum BulletType {
 }
 
 
-class Bullet: Identifiable {
+class Bullet: Entity {
     let id = UUID()
     
     let owner: Player
     let damage: Int
     let size: CGFloat
-    let velocity: CGFloat
+    var velocity: CGFloat
     
     var position: CGPoint
     var angle: Angle

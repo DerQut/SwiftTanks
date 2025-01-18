@@ -12,17 +12,21 @@ struct ContentView: View {
     @EnvironmentObject var globalData: GlobalData
                 
     var body: some View {
-        if globalData.isInMainMenu {
+        switch globalData.currentScreen {
+        case .mainMenu:
             MainMenuView()
-        } else {
+        case .game:
             GameView()
                 .onReceive(globalData.timer) { _ in
-                    if !globalData.isInMainMenu {
+                    if globalData.currentScreen == .game {
                         globalData.moveBullets()
                         globalData.movePlayers()
+                        globalData.pushPlayersFromWalls()
                         globalData.updateView()
                     }
                 }
+        case .victoryScreen:
+            VictoryScreenView()
         }
     }
 }

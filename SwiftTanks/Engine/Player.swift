@@ -14,7 +14,7 @@ enum PlayerType {
     case bouncy
 }
 
-class Player: Identifiable {
+class Player: Entity {
     let id = UUID()
     
     let color: Color
@@ -23,11 +23,12 @@ class Player: Identifiable {
     
     var position: CGPoint
     var angle: Angle
+    let size: CGFloat
     
     var velocity: CGFloat
     var health: Double
     
-    init(bulletType: BulletType, color: Color, maxSpeed: Double, position: CGPoint, angle: Angle, health: Double) {
+    init(bulletType: BulletType, color: Color, size: CGFloat, maxSpeed: Double, position: CGPoint, angle: Angle, health: Double) {
         self.bulletType = bulletType
         self.color = color
         self.maxSpeed = maxSpeed
@@ -35,6 +36,7 @@ class Player: Identifiable {
         self.angle = angle
         self.health = health
         self.velocity = 0.0
+        self.size = size
     }
 }
 
@@ -47,11 +49,11 @@ class PlayerFactory {
         
         switch type {
         case .fast:
-            player = Player(bulletType: .normal, color: color, maxSpeed: 15, position: position, angle: angle, health: 100)
+            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 7, position: position, angle: angle, health: 100)
         case .tanky:
-            player = Player(bulletType: .normal, color: color, maxSpeed: 9, position: position, angle: angle, health: 150)
+            player = Player(bulletType: .normal, color: color, size: 60,  maxSpeed: 4, position: position, angle: angle, health: 150)
         default:
-            player = Player(bulletType: .normal, color: color, maxSpeed: 10, position: position, angle: angle, health: 100)
+            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 5, position: position, angle: angle, health: 100)
         }
         
         return player

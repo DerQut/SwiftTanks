@@ -17,7 +17,6 @@ public struct PlayerView: View {
                 .fill(player.color)
                 .scaledToFill()
             Image(systemName: "arrowshape.up.fill")
-            //Text("^")
                 .foregroundStyle(.white)
                 .scaledToFill()
                 .scaleEffect(1.5)

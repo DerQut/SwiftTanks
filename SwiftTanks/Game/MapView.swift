@@ -14,10 +14,15 @@ struct MapView: View {
             Color(.white)
                 .frame(width: globalData.mapSize.width, height: globalData.mapSize.height)
             
+            ForEach(globalData.walls) {
+                Color(.gray)
+                    .offset(x: $0.position.x, y: $0.position.y)
+                    .frame(width: $0.size.width, height: $0.size.height)
+            }
+            
             ForEach(globalData.getPlayers()) {
                 PlayerView(player: $0)
-                    //.foregroundStyle($0.color)
-                    .frame(width: 50, height: 50)
+                    .frame(width: $0.size, height: $0.size)
                     .offset(x: $0.position.x, y:$0.position.y)
             }
             
