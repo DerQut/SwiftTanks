@@ -15,8 +15,8 @@ struct MapView: View {
                 .frame(width: globalData.mapSize.width, height: globalData.mapSize.height)
             
             ForEach(globalData.getPlayers()) {
-                Circle()
-                    .foregroundStyle($0.color)
+                PlayerView(player: $0)
+                    //.foregroundStyle($0.color)
                     .frame(width: 50, height: 50)
                     .offset(x: $0.position.x, y:$0.position.y)
             }

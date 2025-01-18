@@ -29,12 +29,12 @@ class GlobalData: ObservableObject {
         self.bullets.forEach {
             $0.position.x += $0.velocity * cos($0.angle.radians)
             $0.position.y += $0.velocity * sin($0.angle.radians)
-            print($0.position)
         }
     }
     
     func movePlayers() {
         self.getPlayers().forEach {
+                        
             if (abs($0.position.x)+25 < self.mapSize.width/2) || ($0.position.x * sin($0.angle.radians) >= 0) {
                 $0.position.x -= $0.velocity * sin($0.angle.radians)
             }
