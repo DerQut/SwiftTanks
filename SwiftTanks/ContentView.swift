@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var isInMainMenu: Bool = false
     
+    @EnvironmentObject var globalData: GlobalData
+        
     var body: some View {
-        if isInMainMenu {
+        if globalData.isInMainMenu {
             MainMenuView()
         } else {
             GameView()
@@ -21,4 +22,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(GlobalData())
 }

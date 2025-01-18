@@ -9,6 +9,8 @@ import SwiftUI
 
 struct JoyStickView: View {
     
+    @EnvironmentObject var globalData: GlobalData
+    
     @State private var location: CGPoint = .zero
     @State private var innerCircleLocation: CGPoint = .zero
     @GestureState private var fingerLocation: CGPoint? = nil
@@ -16,6 +18,8 @@ struct JoyStickView: View {
     
     private let bigCircleRadius: CGFloat = 75
     let forceAngleOffset: CGFloat
+    
+    var playerDelegateID: Int
 
     var fingerDrag: some Gesture {
         DragGesture()
@@ -38,6 +42,10 @@ struct JoyStickView: View {
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
                 print(angleText, clampedDistance)
+                if globalData.players[0] != nil {
+                    globalData.players[0]!.angle = Angle.degrees(Double(angleText) ?? 0)
+                    globalData.players[0]!.velocity = globalData.players[0]!.maxSpeed * clampedDistance/75
+                }
             }
             .updating($fingerLocation) { (value, fingerLocation, transaction) in
                 fingerLocation = value.location
@@ -58,7 +66,7 @@ struct JoyStickView: View {
             degrees += 360
         }
         
-        return "\(degrees)°"
+        return "\(degrees)"
     }
     
     var body: some View {
@@ -83,7 +91,7 @@ struct JoyStickView: View {
     ZStack {
         Color(.white)
             .ignoresSafeArea()
-        PlayerControlView(forceAngleOffset: 0.0)
+        PlayerControlView(forceAngleOffset: 0.0, playerDelegateID: 0)
             .opacity(0.5)
             .frame(height: 200)
     }
