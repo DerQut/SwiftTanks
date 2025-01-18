@@ -20,6 +20,7 @@ class Player: Entity {
     let color: Color
     let maxSpeed: Double
     let bulletType: BulletType
+    let bulletFactory = BulletFactory()
     
     var position: CGPoint
     var angle: Angle
@@ -49,11 +50,11 @@ class PlayerFactory {
         
         switch type {
         case .fast:
-            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 7, position: position, angle: angle, health: 100)
+            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 2, position: position, angle: angle, health: 100)
         case .tanky:
-            player = Player(bulletType: .normal, color: color, size: 60,  maxSpeed: 4, position: position, angle: angle, health: 150)
+            player = Player(bulletType: .normal, color: color, size: 60,  maxSpeed: 1, position: position, angle: angle, health: 150)
         default:
-            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 5, position: position, angle: angle, health: 100)
+            player = Player(bulletType: .normal, color: color, size: 50, maxSpeed: 1.5, position: position, angle: angle, health: 100)
         }
         
         return player

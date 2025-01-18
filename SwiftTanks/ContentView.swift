@@ -19,9 +19,12 @@ struct ContentView: View {
             GameView()
                 .onReceive(globalData.timer) { _ in
                     if globalData.currentScreen == .game {
-                        globalData.moveBullets()
-                        globalData.movePlayers()
+                        
+                        globalData.moveEntities()
+                        
                         globalData.pushPlayersFromWalls()
+                        globalData.pushBulletsFromWalls()
+                        
                         globalData.updateView()
                     }
                 }

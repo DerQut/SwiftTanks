@@ -45,11 +45,11 @@ class BulletFactory {
     func createBullet(owner: Player) -> Bullet {
         switch owner.bulletType {
         case .bouncy:
-            return Bullet(owner: owner, damage: 8, maxBounces: 3, size: 4, velocity: 20, position: owner.position, angle: owner.angle)
+            return Bullet(owner: owner, damage: 8, maxBounces: 2, size: 20, velocity: 6, position: owner.position, angle: owner.angle)
         case .fast:
-            return Bullet(owner: owner, damage: 10, maxBounces: 1, size: 5, velocity: 40, position: owner.position, angle: owner.angle)
+            return Bullet(owner: owner, damage: 10, maxBounces: 0, size: 5, velocity: 10, position: owner.position, angle: owner.angle)
         default:
-            return Bullet(owner: owner, damage: 10, maxBounces: 2, size: 5, velocity: 20, position: owner.position, angle: owner.angle)
+            return Bullet(owner: owner, damage: 10, maxBounces: 1, size: 21, velocity: 8, position: owner.position, angle: owner.angle)
         }
     }
 }

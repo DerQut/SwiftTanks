@@ -14,15 +14,20 @@ enum GameScreen {
 }
 
 class GlobalData: ObservableObject {
-    @Published var timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
+    @Published var timer = Timer.publish(every: 1/120, on: .main, in: .common).autoconnect()
     
     @Published var currentScreen: GameScreen = .game
     
-    @Published var mapSize: CGSize = CGSize(width: 1024, height: 768)
+    @Published var mapSize: CGSize = CGSize(width: 960, height: 820)
     
     @Published var players: [Player?] = [nil, nil]
     @Published var bullets: [Bullet] = []
-    @Published var walls: [Wall] = []
+    @Published var walls: [Wall] = [
+        Wall(position: CGPoint(x: -0.5 * 960 - 20, y: 0), size: CGSize(width: 40, height: 820+80)),
+        Wall(position: CGPoint(x: 0.5 * 960 + 20, y: 0), size: CGSize(width: 40, height: 820+80)),
+        Wall(position: CGPoint(x: 0, y: 0.5 * 820 + 20), size: CGSize(width: 960+80, height: 40)),
+        Wall(position: CGPoint(x: 0, y: -0.5 * 820 - 20), size: CGSize(width: 960+80, height: 40))
+    ]
     
     public let playerFacory = PlayerFactory()
     
@@ -32,29 +37,22 @@ class GlobalData: ObservableObject {
         self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
         
         self.walls.append(Wall(position: CGPoint(x: 0, y: 0), size: CGSize(width: 200, height: 100)))
+        
     }
     
     func getPlayers() -> [Player] {
         return self.players.compactMap {$0}
     }
     
-    func moveBullets() {
-        self.bullets.forEach {
-            $0.position.x += $0.velocity * cos($0.angle.radians)
-            $0.position.y += $0.velocity * sin($0.angle.radians)
-        }
-    }
-    
-    func movePlayers() {
+    func moveEntities() {
         self.getPlayers().forEach {
-                        
-            if (abs($0.position.x)+25 < self.mapSize.width/2) || ($0.position.x * sin($0.angle.radians) >= 0) {
-                $0.position.x -= $0.velocity * sin($0.angle.radians)
-            }
-            
-            if (abs($0.position.y)+25 < self.mapSize.height/2) || ($0.position.y * cos($0.angle.radians) >= 0) {
-                $0.position.y -= $0.velocity * cos($0.angle.radians)
-            }
+            $0.position.x -= $0.velocity * sin($0.angle.radians)
+            $0.position.y -= $0.velocity * cos($0.angle.radians)
+        }
+        
+        self.bullets.forEach {
+            $0.position.x -= $0.velocity * sin($0.angle.radians)
+            $0.position.y -= $0.velocity * cos($0.angle.radians)
         }
     }
     
@@ -80,6 +78,34 @@ class GlobalData: ObservableObject {
                     collisions = wall.checkIfCollided(with: player)
                 }
             }
+        }
+    }
+    
+    func pushBulletsFromWalls() {
+        self.bullets.forEach { bullet in
+            self.walls.forEach { wall in
+                let collisions = wall.checkIfCollided(with: bullet)
+                
+                if !collisions.isEmpty {
+                    bullet.bouncesLeft -= 1
+                    bullet.angle = .radians(bullet.angle.radians * (-1))
+                    
+                    if collisions.contains(.down) || collisions.contains(.up) {
+                        bullet.angle = .degrees(180 + bullet.angle.degrees)
+                    }
+                    
+                }
+                
+                if bullet.bouncesLeft < 0 {
+                    self.bullets.removeAll { $0 === bullet }
+                }
+            }
+        }
+    }
+    
+    func fire(fromPlayerWithID id: Int) {
+        if self.players[id] != nil {
+            self.bullets.append(self.players[id]!.bulletFactory.createBullet(owner: self.players[id]!))
         }
     }
     

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MapView: View {
     @EnvironmentObject var globalData: GlobalData
+    
     var body: some View {
         ZStack(alignment: .center) {
             Color(.white)
@@ -24,13 +25,14 @@ struct MapView: View {
                 PlayerView(player: $0)
                     .frame(width: $0.size, height: $0.size)
                     .offset(x: $0.position.x, y:$0.position.y)
+                    .environmentObject(globalData)
             }
             
-            ForEach(globalData.bullets) { bullet in
-                Circle()
-                    .frame(width: bullet.size, height: bullet.size)
-                    .position(bullet.position)
-                    .foregroundStyle(bullet.owner.color)
+            ForEach(globalData.bullets) {
+                BulletView(bullet: $0)
+                    .frame(width: $0.size, height: $0.size)
+                    .offset(x: $0.position.x, y: $0.position.y)
+                    .environmentObject(globalData)
             }
         }
     }

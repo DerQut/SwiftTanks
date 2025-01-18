@@ -8,16 +8,25 @@
 import SwiftUI
 
 struct PlayerControlView: View {
+    
+    @EnvironmentObject var globalData: GlobalData
+    
     let forceAngleOffset: CGFloat
     let playerDelegateID: Int
-    var body: some View {
+    
+    public var body: some View {
         ZStack {
             Color(.gray)
             HStack {
                 JoyStickView(forceAngleOffset: forceAngleOffset, playerDelegateID: playerDelegateID)
                     .offset(x: 83, y: 83)
                 Spacer()
-                Text("PlayerControlView")
+                
+                Button("O") {
+                    globalData.fire(fromPlayerWithID: playerDelegateID)
+                }
+                .font(.largeTitle)
+                .buttonStyle(.borderedProminent)
             }
             .frame(width: UIScreen.main.bounds.size.width/1.5)
             .padding()
