@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct GameView: View {
+    @EnvironmentObject var globalData: GlobalData
     var body: some View {
         ZStack {
             MapView()
             
             HStack {
-                PlayerControlView(forceAngleOffset: 0.0, playerDelegateID: 0)
+                PlayerControlView(forceAngleOffset: .pi, playerDelegateID: 0)
                     .rotationEffect(.degrees(90))
                     .frame(height: 200)
                     .opacity(0.5)
@@ -26,7 +27,7 @@ struct GameView: View {
                 Spacer()
                     .frame(width: UIScreen.main.bounds.size.width-200)
                 
-                PlayerControlView(forceAngleOffset: .pi, playerDelegateID: 1)
+                PlayerControlView(forceAngleOffset: 0.0, playerDelegateID: 1)
                     .rotationEffect(.degrees(-90))
                     .frame(height: 200)
                     .opacity(0.5)

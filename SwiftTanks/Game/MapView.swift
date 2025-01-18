@@ -11,13 +11,14 @@ struct MapView: View {
     @EnvironmentObject var globalData: GlobalData
     var body: some View {
         ZStack(alignment: .center) {
-            Color(.white).ignoresSafeArea()
+            Color(.white)
+                .frame(width: globalData.mapSize.width, height: globalData.mapSize.height)
             
             ForEach(globalData.getPlayers()) {
                 Circle()
                     .foregroundStyle($0.color)
                     .frame(width: 50, height: 50)
-                    .position($0.position)
+                    .offset(x: $0.position.x, y:$0.position.y)
             }
             
             ForEach(globalData.bullets) { bullet in

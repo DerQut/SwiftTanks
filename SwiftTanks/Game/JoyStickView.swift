@@ -42,9 +42,10 @@ struct JoyStickView: View {
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
                 print(angleText, clampedDistance)
-                if globalData.players[0] != nil {
-                    globalData.players[0]!.angle = Angle.degrees(Double(angleText) ?? 0)
-                    globalData.players[0]!.velocity = globalData.players[0]!.maxSpeed * clampedDistance/75
+                
+                if globalData.players[playerDelegateID] != nil {
+                    globalData.players[playerDelegateID]!.angle = Angle.degrees(Double(angleText) ?? 0)
+                    globalData.players[playerDelegateID]!.velocity = globalData.players[playerDelegateID]!.maxSpeed * clampedDistance/75
                 }
             }
             .updating($fingerLocation) { (value, fingerLocation, transaction) in
@@ -54,6 +55,9 @@ struct JoyStickView: View {
                 // Snap the smaller circle to the center of the larger circle
                 let center = location
                 innerCircleLocation = center
+                if globalData.players[playerDelegateID] != nil {
+                    globalData.players[playerDelegateID]!.velocity = 0
+                }
             }
     }
     

@@ -23,6 +23,7 @@ class Player: Identifiable {
     
     var position: CGPoint
     var angle: Angle
+    
     var velocity: CGFloat
     var health: Double
     
