@@ -40,8 +40,7 @@ class Bullet: Entity {
 }
 
 
-class BulletFactory: Identifiable {
-    let id = UUID()
+class BulletFactory {
     
     func createBullet(owner: Player) -> Bullet {
         switch owner.bulletType {
