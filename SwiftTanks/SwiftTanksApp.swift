@@ -20,7 +20,7 @@ class GlobalData: ObservableObject {
     
     @Published var mapSize: CGSize = CGSize(width: 920, height: 820)
     
-    @Published var players: [Player?] = [nil, nil]
+    @Published var players: [Player] = []
     @Published var bullets: [Bullet] = []
     @Published var walls: [Wall] = []
     
@@ -29,9 +29,9 @@ class GlobalData: ObservableObject {
     public let playerFacory = PlayerFactory()
     
     init() {
-        self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
+        self.players.append(self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero))
         
-        self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
+        self.players.append(self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero))
         
         self.preloadBorderWalls()
         
@@ -103,9 +103,7 @@ class GlobalData: ObservableObject {
     }
     
     func fire(fromPlayerWithID id: Int) {
-        if self.players[id] != nil {
-            self.bullets.append(self.players[id]!.bulletFactory.createBullet(owner: self.players[id]!))
-        }
+        self.bullets.append(self.players[id].bulletFactory.createBullet(owner: self.players[id]))
     }
     
     func dealDamage() {
@@ -150,10 +148,7 @@ class GlobalData: ObservableObject {
     
     func clearMap() {
         self.bullets.removeAll()
-        self.players.removeAll()
         self.walls.removeAll()
-        
-        self.players = [nil, nil]
     }
     
     func preloadBorderWalls() {
