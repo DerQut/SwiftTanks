@@ -90,10 +90,7 @@ struct PlayerCreationView: View {
             .onChange(of: isReady) {
                 if isReady {
                     
-                    
-                    var newPlayer = playerFactory.createPlayer(type: pickedTankType, bulletType: pickedBulletType, color: pickedColor, position: globalData.playerSpawnPoints[self.playerDelegateID], angle: .zero)
-                    
-                    globalData.players[self.playerDelegateID] = newPlayer
+                    globalData.players[self.playerDelegateID] = playerFactory.createPlayer(type: pickedTankType, bulletType: pickedBulletType, color: pickedColor, position: globalData.playerSpawnPoints[self.playerDelegateID], angle: .zero)
 
                     
                     globalData.playersReady += 1
