@@ -34,9 +34,9 @@ class GlobalData: ObservableObject {
     public let playerFacory = PlayerFactory()
     
     init() {
-        self.players.append(self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero))
+        self.players.append(self.playerFacory.createPlayer(type: .fast, bulletType: .bouncy, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero))
         
-        self.players.append(self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero))
+        self.players.append(self.playerFacory.createPlayer(type: .tanky, bulletType: .fast, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero))
         
         self.preloadBorderWalls()
         
@@ -211,9 +211,9 @@ class GlobalData: ObservableObject {
     
     func rematch() {
         
-        self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
+        self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .bouncy, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
         
-        self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
+        self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .fast, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
         
         self.preloadBorderWalls()
         

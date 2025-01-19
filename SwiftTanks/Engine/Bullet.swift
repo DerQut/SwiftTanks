@@ -49,9 +49,9 @@ class BulletFactory {
         case .bouncy:
             return Bullet(owner: owner, damage: 8, maxBounces: 2, size: 20, velocity: 6, position: owner.position, angle: owner.angle)
         case .fast:
-            return Bullet(owner: owner, damage: 10, maxBounces: 0, size: 5, velocity: 10, position: owner.position, angle: owner.angle)
+            return Bullet(owner: owner, damage: 10, maxBounces: 0, size: 15, velocity: 10, position: owner.position, angle: owner.angle)
         default:
-            return Bullet(owner: owner, damage: 10, maxBounces: 1, size: 21, velocity: 8, position: owner.position, angle: owner.angle)
+            return Bullet(owner: owner, damage: 10, maxBounces: 1, size: 25, velocity: 8, position: owner.position, angle: owner.angle)
         }
     }
 }
