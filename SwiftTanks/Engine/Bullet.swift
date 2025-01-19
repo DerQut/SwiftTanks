@@ -19,22 +19,24 @@ class Bullet: Entity {
     let id = UUID()
     
     let owner: Player
-    let damage: Int
+    let damage: Double
     let size: CGFloat
     var velocity: CGFloat
     
     var position: CGPoint
     var angle: Angle
     
+    let maxBounces: Int
     var bouncesLeft: Int
     
-    init(owner: Player, damage: Int, maxBounces: Int, size: CGFloat, velocity: CGFloat, position: CGPoint, angle: Angle) {
+    init(owner: Player, damage: Double, maxBounces: Int, size: CGFloat, velocity: CGFloat, position: CGPoint, angle: Angle) {
         self.owner = owner
         self.damage = damage
         self.size = size
         self.velocity = velocity
         self.position = position
         self.angle = angle
+        self.maxBounces = maxBounces
         self.bouncesLeft = maxBounces
     }
 }

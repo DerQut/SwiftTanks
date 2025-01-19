@@ -17,7 +17,7 @@ struct GameView: View {
                 PlayerControlView(forceAngleOffset: .pi, playerDelegateID: 0)
                     .rotationEffect(.degrees(90))
                     .frame(height: 200)
-                    .opacity(0.5)
+                    .opacity(0.7)
                 
                 Spacer()
                     .frame(width: UIScreen.main.bounds.size.width-200)
@@ -30,7 +30,23 @@ struct GameView: View {
                 PlayerControlView(forceAngleOffset: 0.0, playerDelegateID: 1)
                     .rotationEffect(.degrees(-90))
                     .frame(height: 200)
-                    .opacity(0.5)
+                    .opacity(0.7)
+            }
+        }
+        .onReceive(globalData.timer) { _ in
+            if globalData.currentScreen == .game {
+                
+                globalData.moveEntities()
+                
+                globalData.pushPlayersFromWalls()
+                globalData.pushBulletsFromWalls()
+                
+                globalData.destroyBulletsTouchingOtherBullets()
+                globalData.dealDamage()
+                
+                globalData.killCheck()
+                
+                globalData.updateView()
             }
         }
     }

@@ -18,16 +18,18 @@ class GlobalData: ObservableObject {
     
     @Published var currentScreen: GameScreen = .game
     
-    @Published var mapSize: CGSize = CGSize(width: 960, height: 820)
+    @Published var mapSize: CGSize = CGSize(width: 920, height: 820)
     
     @Published var players: [Player?] = [nil, nil]
     @Published var bullets: [Bullet] = []
     @Published var walls: [Wall] = [
-        Wall(position: CGPoint(x: -0.5 * 960 - 20, y: 0), size: CGSize(width: 40, height: 820+80)),
-        Wall(position: CGPoint(x: 0.5 * 960 + 20, y: 0), size: CGSize(width: 40, height: 820+80)),
-        Wall(position: CGPoint(x: 0, y: 0.5 * 820 + 20), size: CGSize(width: 960+80, height: 40)),
-        Wall(position: CGPoint(x: 0, y: -0.5 * 820 - 20), size: CGSize(width: 960+80, height: 40))
+        Wall(position: CGPoint(x: -0.5 * 920 - 20, y: 0), size: CGSize(width: 40, height: 820+80)),
+        Wall(position: CGPoint(x: 0.5 * 920 + 20, y: 0), size: CGSize(width: 40, height: 820+80)),
+        Wall(position: CGPoint(x: 0, y: 0.5 * 820 + 20), size: CGSize(width: 920+80, height: 40)),
+        Wall(position: CGPoint(x: 0, y: -0.5 * 820 - 20), size: CGSize(width: 920+80, height: 40))
     ]
+    
+    @Published var victoriousID: Int? = nil
     
     public let playerFacory = PlayerFactory()
     
@@ -107,6 +109,55 @@ class GlobalData: ObservableObject {
         if self.players[id] != nil {
             self.bullets.append(self.players[id]!.bulletFactory.createBullet(owner: self.players[id]!))
         }
+    }
+    
+    func dealDamage() {
+        self.getPlayers().forEach { player in
+            let nearbyBullets = self.bullets.filter{$0.position.distance(to: player.position) < $0.size/2 + player.size/2}
+            
+            nearbyBullets.forEach { bullet in
+                if bullet.owner !== player || bullet.bouncesLeft < bullet.maxBounces {
+                    player.health -= bullet.damage
+                    self.bullets.removeAll { $0 === bullet }
+                }
+            }
+        }
+    }
+    
+    func destroyBulletsTouchingOtherBullets() {
+        
+        var bulletsToBeDestroyed: [Bullet] = []
+        
+        self.bullets.forEach { firstBullet in
+            self.bullets.filter {$0.position.distance(to: firstBullet.position) < $0.size/2 + firstBullet.size/2 && $0 !== firstBullet}.forEach { otherBullet in
+                
+                bulletsToBeDestroyed.append(otherBullet)
+                bulletsToBeDestroyed.append(firstBullet)
+            }
+        }
+        
+        bulletsToBeDestroyed.forEach { bullet in
+            self.bullets.removeAll { $0 === bullet }
+        }
+    }
+    
+    func killCheck() {
+        self.getPlayers().forEach { player in
+            if player.health <= 0 {
+                self.currentScreen = .victoryScreen
+            }
+        }
+        
+        var i: Int = 0
+        while i < self.getPlayers().count {
+            if self.getPlayers()[i].health > 0 && victoriousID != nil {
+                self.victoriousID = i
+            } else {
+                self.victoriousID = nil
+            }
+            i = i + 1
+        }
+        
     }
     
     func updateView() {

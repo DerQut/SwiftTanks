@@ -17,9 +17,21 @@ struct PlayerControlView: View {
     public var body: some View {
         ZStack {
             Color(.gray)
-            HStack {
+
                 JoyStickView(forceAngleOffset: forceAngleOffset, playerDelegateID: playerDelegateID)
                     .offset(x: 83, y: 83)
+            HStack {
+                Circle()
+                    .frame(width: 150, height: 150)
+                    .offset(x: -9)
+                    .opacity(0.0)
+                
+                Spacer()
+                
+                ProgressView(value: globalData.players[playerDelegateID]?.health ?? 0.0, total: globalData.players[playerDelegateID]?.maxHealth ?? 0.0)
+                    .frame(width: globalData.players[playerDelegateID]?.maxHealth ?? 0.0)
+                    .scaleEffect(x: 3, y: 15)
+                
                 Spacer()
                 
                 Button("O") {
@@ -27,6 +39,8 @@ struct PlayerControlView: View {
                 }
                 .font(.largeTitle)
                 .buttonStyle(.borderedProminent)
+                .frame(width: 150)
+                
             }
             .frame(width: UIScreen.main.bounds.size.width/1.5)
             .padding()

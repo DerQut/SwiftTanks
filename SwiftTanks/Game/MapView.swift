@@ -13,7 +13,8 @@ struct MapView: View {
     var body: some View {
         ZStack(alignment: .center) {
             Color(.white)
-                .frame(width: globalData.mapSize.width, height: globalData.mapSize.height)
+                //.frame(width: globalData.mapSize.width, height: globalData.mapSize.height)
+                .opacity(0.6)
             
             ForEach(globalData.walls) {
                 Color(.gray)

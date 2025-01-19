@@ -12,24 +12,19 @@ struct ContentView: View {
     @EnvironmentObject var globalData: GlobalData
                 
     var body: some View {
-        switch globalData.currentScreen {
-        case .mainMenu:
-            MainMenuView()
-        case .game:
-            GameView()
-                .onReceive(globalData.timer) { _ in
-                    if globalData.currentScreen == .game {
-                        
-                        globalData.moveEntities()
-                        
-                        globalData.pushPlayersFromWalls()
-                        globalData.pushBulletsFromWalls()
-                        
-                        globalData.updateView()
-                    }
-                }
-        case .victoryScreen:
-            VictoryScreenView()
+        ZStack {
+            BackgroundGradient()
+                .environmentObject(globalData)
+                .ignoresSafeArea()
+            
+            switch globalData.currentScreen {
+            case .mainMenu:
+                MainMenuView()
+            case .game:
+                GameView()
+            case .victoryScreen:
+                VictoryScreenView()
+            }
         }
     }
 }
