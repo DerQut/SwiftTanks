@@ -22,9 +22,6 @@ struct ContentView: View {
                 GameView()
             case .victoryScreen:
                 VictoryScreenView()
-                    .onAppear() {
-                        globalData.clearMap()
-                    }
             }
         }
         .animation(.default, value: globalData.currentScreen)
