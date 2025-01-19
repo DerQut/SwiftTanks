@@ -13,6 +13,7 @@ struct MapView: View {
     var body: some View {
         ZStack(alignment: .center) {
             Color(.white)
+                .ignoresSafeArea()
             
             ForEach(globalData.walls) {
                 Color(.gray)

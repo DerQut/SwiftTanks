@@ -21,7 +21,7 @@ enum EngineError: Error {
 class GlobalData: ObservableObject {
     @Published var timer = Timer.publish(every: 1/120, on: .main, in: .common).autoconnect()
     
-    @Published var currentScreen: GameScreen = .game
+    @Published var currentScreen: GameScreen = .mainMenu
     
     @Published var mapSize: CGSize = CGSize(width: 920, height: 820)
     
@@ -31,12 +31,19 @@ class GlobalData: ObservableObject {
     
     @Published var playerHealthAtEndOfGame: [Double] = []
     
+    @Published var playersReady: Int = 0
+    
     public let playerFacory = PlayerFactory()
     
+    public let playerSpawnPoints: [CGPoint] = [
+        CGPoint(x: -300, y: -300),
+        CGPoint(x: 300, y: 300)
+    ]
+    
     init() {
-        self.players.append(self.playerFacory.createPlayer(type: .fast, bulletType: .bouncy, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero))
+        self.players.append(self.playerFacory.createPlayer(type: .normal, bulletType: .normal, color: .blue, position: self.playerSpawnPoints[0], angle: .zero))
         
-        self.players.append(self.playerFacory.createPlayer(type: .tanky, bulletType: .fast, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero))
+        self.players.append(self.playerFacory.createPlayer(type: .normal, bulletType: .normal, color: .red, position: self.playerSpawnPoints[1], angle: .zero))
         
         self.preloadBorderWalls()
         
@@ -203,21 +210,34 @@ class GlobalData: ObservableObject {
     func preloadBorderWalls() {
         self.walls = [
             Wall(position: CGPoint(x: -0.5 * self.mapSize.width - 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            
             Wall(position: CGPoint(x: 0.5 * self.mapSize.width + 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            
             Wall(position: CGPoint(x: 0, y: 0.5 * self.mapSize.height + 20), size: CGSize(width: self.mapSize.width+80, height: 40)),
-            Wall(position: CGPoint(x: 0, y: -0.5 * self.mapSize.width - 20), size: CGSize(width: self.mapSize.height+80, height: 40))
+            
+            Wall(position: CGPoint(x: 0, y: -0.5 * self.mapSize.height - 20), size: CGSize(width: self.mapSize.width+80, height: 40))
         ]
     }
     
     func rematch() {
         
-        self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .bouncy, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
+        self.players[0].health = self.players[0].maxHealth
+        self.players[0].position = self.playerSpawnPoints[0]
+        self.players[0].angle = .zero
         
-        self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .fast, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
+        self.players[1].health = self.players[1].maxHealth
+        self.players[1].position = self.playerSpawnPoints[1]
+        self.players[1].angle = .zero
         
+        self.startGame()
+    }
+    
+    func startGame() {
+        self.clearMap()
         self.preloadBorderWalls()
-        
         self.walls.append(Wall(position: CGPoint(x: 0, y: 0), size: CGSize(width: 200, height: 100)))
+        
+        self.playersReady = 0
         
         self.currentScreen = .game
     }

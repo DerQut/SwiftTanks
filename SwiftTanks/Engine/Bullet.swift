@@ -8,10 +8,12 @@
 import Foundation
 import SwiftUI
 
-enum BulletType {
+enum BulletType: String, CaseIterable, Identifiable {
     case normal
-    case bouncy
     case fast
+    case bouncy
+    
+    var id: String { self.rawValue.capitalized }
 }
 
 

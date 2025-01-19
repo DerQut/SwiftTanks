@@ -8,14 +8,17 @@
 import Foundation
 import SwiftUI
 
-enum PlayerType {
+enum PlayerType: String, CaseIterable, Identifiable {
+    case normal
     case fast
     case tanky
-    case bouncy
+    
+    var id: String { self.rawValue.capitalized }
 }
 
 class Player: Entity {
     let id = UUID()
+    let type: PlayerType
     
     let color: Color
     let maxSpeed: Double
@@ -30,7 +33,8 @@ class Player: Entity {
     let maxHealth: Double
     var health: Double
     
-    init(bulletType: BulletType, color: Color, size: CGFloat, maxSpeed: Double, position: CGPoint, angle: Angle, maxHealth: Double) {
+    init(type: PlayerType, bulletType: BulletType, color: Color, size: CGFloat, maxSpeed: Double, position: CGPoint, angle: Angle, maxHealth: Double) {
+        self.type = type
         self.bulletType = bulletType
         self.color = color
         self.maxSpeed = maxSpeed
@@ -62,11 +66,11 @@ class PlayerFactory {
         
         switch type {
         case .fast:
-            player = Player(bulletType: bulletType, color: color, size: 50, maxSpeed: 2, position: position, angle: angle, maxHealth: 100)
+            player = Player(type: type, bulletType: bulletType, color: color, size: 50, maxSpeed: 2, position: position, angle: angle, maxHealth: 100)
         case .tanky:
-            player = Player(bulletType: bulletType, color: color, size: 60,  maxSpeed: 1, position: position, angle: angle, maxHealth: 150)
+            player = Player(type: type, bulletType: bulletType, color: color, size: 60,  maxSpeed: 1, position: position, angle: angle, maxHealth: 150)
         default:
-            player = Player(bulletType: bulletType, color: color, size: 50, maxSpeed: 1.5, position: position, angle: angle, maxHealth: 100)
+            player = Player(type: type, bulletType: bulletType, color: color, size: 50, maxSpeed: 1.5, position: position, angle: angle, maxHealth: 100)
         }
         
         return player

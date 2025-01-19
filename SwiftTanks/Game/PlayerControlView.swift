@@ -50,7 +50,7 @@ struct PlayerControlView: View {
                 .frame(width: 150)
                 
             }
-            .frame(width: UIScreen.main.bounds.size.width/1.5)
+            .frame(width: UIScreen.main.bounds.size.width/1.47)
             .padding()
         }
     }

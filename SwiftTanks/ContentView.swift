@@ -17,6 +17,7 @@ struct ContentView: View {
             switch globalData.currentScreen {
             case .mainMenu:
                 MainMenuView()
+                    .environmentObject(globalData)
             case .game:
                 GameView()
             case .victoryScreen:
