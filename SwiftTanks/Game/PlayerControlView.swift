@@ -19,7 +19,7 @@ struct PlayerControlView: View {
             Color(.gray)
 
                 JoyStickView(forceAngleOffset: forceAngleOffset, playerDelegateID: playerDelegateID)
-                    .offset(x: 83, y: 83)
+                    .offset(x: 120, y: 100)
             HStack {
                 Circle()
                     .frame(width: 150, height: 150)
@@ -36,18 +36,25 @@ struct PlayerControlView: View {
                 
                 Spacer()
                 
-                Button("O") {
-                    do {
-                        try globalData.fire(fromPlayerWithID: playerDelegateID)
-                    } catch EngineError.invalidPlayerID {
-                        print("EngineError.invalidPlayerID error in PlayerControlView")
-                    } catch {
-                        print("Unknown error in PlayerControlView")
-                    }
-                }
-                .font(.largeTitle)
+                Button(
+                    action: {
+                        do {
+                            try globalData.fire(fromPlayerWithID: playerDelegateID)
+                        } catch EngineError.invalidPlayerID {
+                            print("Invalid player ID in PlayerControlView button action")
+                        } catch {
+                            print("Unknown error in PlayerControlView")
+                        }
+                    },
+                   label: {
+                    Image(systemName: "pencil.tip")
+                        .font(.largeTitle)
+                })
+                .buttonBorderShape(.circle)
                 .buttonStyle(.borderedProminent)
-                .frame(width: 150)
+                .tint(globalData.getPlayers()[playerDelegateID].color)
+                .padding()
+                .offset(x: -50)
                 
             }
             .frame(width: UIScreen.main.bounds.size.width/1.47)
