@@ -42,9 +42,14 @@ struct JoyStickView: View {
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
                 print(angleText)
-                if playerDelegateID <= globalData.getPlayers().count {
-                    globalData.players[playerDelegateID].angle = Angle.degrees(Double(angleText) ?? 0)
-                    globalData.players[playerDelegateID].velocity = globalData.players[playerDelegateID].maxSpeed * clampedDistance/75
+                
+                do {
+                    try globalData.setAngle(Angle.degrees(Double(angleText) ?? 0), forPlayerWithID: self.playerDelegateID)
+                    try globalData.setVelocityRatio(clampedDistance/75, forPlayerWithID: self.playerDelegateID)
+                } catch EngineError.invalidPlayerID {
+                    print("Invalid player ID in JoyStickView.fingerDrag.onChanged")
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
             .updating($fingerLocation) { (value, fingerLocation, transaction) in
@@ -54,8 +59,13 @@ struct JoyStickView: View {
                 // Snap the smaller circle to the center of the larger circle
                 let center = location
                 innerCircleLocation = center
-                if playerDelegateID <= globalData.getPlayers().count {
-                    globalData.players[playerDelegateID].velocity = 0
+                
+                do {
+                    try globalData.setVelocity(0, forPlayerWithID: self.playerDelegateID)
+                } catch EngineError.invalidPlayerID {
+                    print("Invalid player ID in JoyStickView.fingerDrag.onEnded")
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
     }

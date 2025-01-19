@@ -37,7 +37,13 @@ struct PlayerControlView: View {
                 Spacer()
                 
                 Button("O") {
-                    globalData.fire(fromPlayerWithID: playerDelegateID)
+                    do {
+                        try globalData.fire(fromPlayerWithID: playerDelegateID)
+                    } catch EngineError.invalidPlayerID {
+                        print("EngineError.invalidPlayerID error in PlayerControlView")
+                    } catch {
+                        print("Unknown error in PlayerControlView")
+                    }
                 }
                 .font(.largeTitle)
                 .buttonStyle(.borderedProminent)

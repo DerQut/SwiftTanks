@@ -13,6 +13,11 @@ enum GameScreen {
     case victoryScreen
 }
 
+enum EngineError: Error {
+    case invalidPlayerID
+    case missingBulletFactory
+}
+
 class GlobalData: ObservableObject {
     @Published var timer = Timer.publish(every: 1/120, on: .main, in: .common).autoconnect()
     
@@ -43,13 +48,21 @@ class GlobalData: ObservableObject {
         return self.players.compactMap {$0}
     }
     
+    func getWalls() -> [Wall] {
+        return self.walls.compactMap {$0}
+    }
+    
+    func getBullets() -> [Bullet] {
+        return self.bullets.compactMap {$0}
+    }
+    
     func moveEntities() {
         self.getPlayers().forEach {
             $0.position.x -= $0.velocity * sin($0.angle.radians)
             $0.position.y -= $0.velocity * cos($0.angle.radians)
         }
         
-        self.bullets.forEach {
+        self.getBullets().forEach {
             $0.position.x -= $0.velocity * sin($0.angle.radians)
             $0.position.y -= $0.velocity * cos($0.angle.radians)
         }
@@ -57,22 +70,22 @@ class GlobalData: ObservableObject {
     
     func pushPlayersFromWalls() {
         self.getPlayers().forEach { player in
-            self.walls.forEach { wall in
+            self.getWalls().forEach { wall in
                 var collisions = wall.checkIfCollided(with: player)
                 while collisions.isEmpty == false {
                     
                     if collisions.contains(.left) {
-                        player.position.x -= 0.5
+                        player.position.x -= 0.25
                     }
                     else if collisions.contains(.right) {
-                        player.position.x += 0.5
+                        player.position.x += 0.25
                     }
                     
                     if collisions.contains(.up) {
-                        player.position.y += 0.5
+                        player.position.y += 0.25
                     }
                     else if collisions.contains(.down) {
-                        player.position.y -= 0.5
+                        player.position.y -= 0.25
                     }
                     collisions = wall.checkIfCollided(with: player)
                 }
@@ -81,8 +94,8 @@ class GlobalData: ObservableObject {
     }
     
     func pushBulletsFromWalls() {
-        self.bullets.forEach { bullet in
-            self.walls.forEach { wall in
+        self.getBullets().forEach { bullet in
+            self.getWalls().forEach { wall in
                 let collisions = wall.checkIfCollided(with: bullet)
                 
                 if !collisions.isEmpty {
@@ -102,13 +115,53 @@ class GlobalData: ObservableObject {
         }
     }
     
-    func fire(fromPlayerWithID id: Int) {
-        self.bullets.append(self.players[id].bulletFactory.createBullet(owner: self.players[id]))
+    func fire(fromPlayerWithID id: Int) throws {
+        if id > self.getPlayers().endIndex {
+            throw EngineError.invalidPlayerID
+        }
+        
+        let player = self.getPlayers()[id]
+        
+        do {
+            try self.bullets.append(player.createBullet())
+        } catch EngineError.missingBulletFactory {
+            print("Missing bullet factory for player with id \(id)")
+        } catch {
+            print("\(error)")
+        }
+    }
+    
+    func setAngle(_ angle: Angle, forPlayerWithID id: Int) throws {
+        if id > self.getPlayers().endIndex {
+            throw EngineError.invalidPlayerID
+        }
+        
+        let player = self.getPlayers()[id]
+        player.angle = angle
+        
+    }
+    
+    func setVelocity(_ velocity: CGFloat, forPlayerWithID id: Int) throws {
+        if id > self.getPlayers().endIndex {
+            throw EngineError.invalidPlayerID
+        }
+        
+        let player = self.getPlayers()[id]
+        player.velocity = velocity
+    }
+    
+    func setVelocityRatio(_ velocityRatio: CGFloat, forPlayerWithID id: Int) throws {
+        if id > self.getPlayers().endIndex {
+            throw EngineError.invalidPlayerID
+        }
+        
+        let player = self.getPlayers()[id]
+        player.velocity = velocityRatio * player.maxSpeed
     }
     
     func dealDamage() {
         self.getPlayers().forEach { player in
-            let nearbyBullets = self.bullets.filter{$0.position.distance(to: player.position) < $0.size/2 + player.size/2}
+            let nearbyBullets = self.getBullets().filter{$0.position.distance(to: player.position) < $0.size/2 + player.size/2}
             
             nearbyBullets.forEach { bullet in
                 if bullet.owner !== player || bullet.bouncesLeft < bullet.maxBounces {
@@ -120,7 +173,6 @@ class GlobalData: ObservableObject {
     }
     
     func destroyBulletsTouchingOtherBullets() {
-        
         var bulletsToBeDestroyed: [Bullet] = []
         
         self.bullets.forEach { firstBullet in
@@ -137,13 +189,10 @@ class GlobalData: ObservableObject {
     }
     
     func killCheck() {
-        self.getPlayers().forEach { player in
-            if player.health <= 0 {
-                self.playerHealthAtEndOfGame = self.getPlayers().map {$0.health}
-                self.currentScreen = .victoryScreen
-            }
+        if !self.getPlayers().filter({$0.health <= 0}).isEmpty {
+            self.playerHealthAtEndOfGame = self.getPlayers().map {$0.health}
+            self.currentScreen = .victoryScreen
         }
-        
     }
     
     func clearMap() {

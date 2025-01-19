@@ -20,7 +20,7 @@ class Player: Entity {
     let color: Color
     let maxSpeed: Double
     let bulletType: BulletType
-    let bulletFactory = BulletFactory()
+    let bulletFactory: BulletFactory?
     
     var position: CGPoint
     var angle: Angle
@@ -40,7 +40,17 @@ class Player: Entity {
         self.maxHealth = maxHealth
         self.velocity = 0.0
         self.size = size
+        
+        self.bulletFactory = BulletFactory()
     }
+    
+    func createBullet() throws -> Bullet {
+        if self.bulletFactory != nil {
+            return self.bulletFactory!.createBullet(owner: self)
+        }
+        throw EngineError.missingBulletFactory
+    }
+    
 }
 
 
