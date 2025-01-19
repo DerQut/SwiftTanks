@@ -209,13 +209,13 @@ class GlobalData: ObservableObject {
     
     func preloadBorderWalls() {
         self.walls = [
-            Wall(position: CGPoint(x: -0.5 * self.mapSize.width - 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            Wall(position: CGPoint(x: -0.5 * self.mapSize.width - 10, y: 0), size: CGSize(width: 20, height: self.mapSize.height+40)),
             
-            Wall(position: CGPoint(x: 0.5 * self.mapSize.width + 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            Wall(position: CGPoint(x: 0.5 * self.mapSize.width + 10, y: 0), size: CGSize(width: 20, height: self.mapSize.height+40)),
             
-            Wall(position: CGPoint(x: 0, y: 0.5 * self.mapSize.height + 20), size: CGSize(width: self.mapSize.width+80, height: 40)),
+            Wall(position: CGPoint(x: 0, y: 0.5 * self.mapSize.height + 10), size: CGSize(width: self.mapSize.width+40, height: 20)),
             
-            Wall(position: CGPoint(x: 0, y: -0.5 * self.mapSize.height - 20), size: CGSize(width: self.mapSize.width+80, height: 40))
+            Wall(position: CGPoint(x: 0, y: -0.5 * self.mapSize.height - 10), size: CGSize(width: self.mapSize.width+40, height: 20))
         ]
     }
     
