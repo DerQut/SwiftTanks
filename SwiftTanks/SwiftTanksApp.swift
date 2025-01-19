@@ -22,14 +22,9 @@ class GlobalData: ObservableObject {
     
     @Published var players: [Player?] = [nil, nil]
     @Published var bullets: [Bullet] = []
-    @Published var walls: [Wall] = [
-        Wall(position: CGPoint(x: -0.5 * 920 - 20, y: 0), size: CGSize(width: 40, height: 820+80)),
-        Wall(position: CGPoint(x: 0.5 * 920 + 20, y: 0), size: CGSize(width: 40, height: 820+80)),
-        Wall(position: CGPoint(x: 0, y: 0.5 * 820 + 20), size: CGSize(width: 920+80, height: 40)),
-        Wall(position: CGPoint(x: 0, y: -0.5 * 820 - 20), size: CGSize(width: 920+80, height: 40))
-    ]
+    @Published var walls: [Wall] = []
     
-    @Published var victoriousID: Int? = nil
+    @Published var playerHealthAtEndOfGame: [Double] = []
     
     public let playerFacory = PlayerFactory()
     
@@ -37,6 +32,8 @@ class GlobalData: ObservableObject {
         self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
         
         self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
+        
+        self.preloadBorderWalls()
         
         self.walls.append(Wall(position: CGPoint(x: 0, y: 0), size: CGSize(width: 200, height: 100)))
         
@@ -144,20 +141,41 @@ class GlobalData: ObservableObject {
     func killCheck() {
         self.getPlayers().forEach { player in
             if player.health <= 0 {
+                self.playerHealthAtEndOfGame = self.getPlayers().map {$0.health}
                 self.currentScreen = .victoryScreen
             }
         }
         
-        var i: Int = 0
-        while i < self.getPlayers().count {
-            if self.getPlayers()[i].health > 0 && victoriousID != nil {
-                self.victoriousID = i
-            } else {
-                self.victoriousID = nil
-            }
-            i = i + 1
-        }
+    }
+    
+    func clearMap() {
+        self.bullets.removeAll()
+        self.players.removeAll()
+        self.walls.removeAll()
         
+        self.players = [nil, nil]
+    }
+    
+    func preloadBorderWalls() {
+        self.walls = [
+            Wall(position: CGPoint(x: -0.5 * self.mapSize.width - 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            Wall(position: CGPoint(x: 0.5 * self.mapSize.width + 20, y: 0), size: CGSize(width: 40, height: self.mapSize.height+80)),
+            Wall(position: CGPoint(x: 0, y: 0.5 * self.mapSize.height + 20), size: CGSize(width: self.mapSize.width+80, height: 40)),
+            Wall(position: CGPoint(x: 0, y: -0.5 * self.mapSize.width - 20), size: CGSize(width: self.mapSize.height+80, height: 40))
+        ]
+    }
+    
+    func rematch() {
+        
+        self.players[0] = self.playerFacory.createPlayer(type: .fast, bulletType: .normal, color: .blue, position: CGPoint(x: -300, y: -300), angle: .zero)
+        
+        self.players[1] = self.playerFacory.createPlayer(type: .tanky, bulletType: .normal, color: .red, position: CGPoint(x: 300, y: 300), angle: .zero)
+        
+        self.preloadBorderWalls()
+        
+        self.walls.append(Wall(position: CGPoint(x: 0, y: 0), size: CGSize(width: 200, height: 100)))
+        
+        self.currentScreen = .game
     }
     
     func updateView() {

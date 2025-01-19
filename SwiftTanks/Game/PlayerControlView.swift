@@ -29,8 +29,10 @@ struct PlayerControlView: View {
                 Spacer()
                 
                 ProgressView(value: globalData.players[playerDelegateID]?.health ?? 0.0, total: globalData.players[playerDelegateID]?.maxHealth ?? 0.0)
-                    .frame(width: globalData.players[playerDelegateID]?.maxHealth ?? 0.0)
+                    .frame(width: globalData.players[playerDelegateID]?.maxHealth ?? 100)
                     .scaleEffect(x: 3, y: 15)
+                    .tint(globalData.players[self.playerDelegateID]?.color ?? .black)
+                    .opacity(globalData.players[self.playerDelegateID] == nil ? 0 : 1)
                 
                 Spacer()
                 

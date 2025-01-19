@@ -13,9 +13,6 @@ struct ContentView: View {
                 
     var body: some View {
         ZStack {
-            BackgroundGradient()
-                .environmentObject(globalData)
-                .ignoresSafeArea()
             
             switch globalData.currentScreen {
             case .mainMenu:
@@ -24,8 +21,12 @@ struct ContentView: View {
                 GameView()
             case .victoryScreen:
                 VictoryScreenView()
+                    .onAppear() {
+                        globalData.clearMap()
+                    }
             }
         }
+        .animation(.default, value: globalData.currentScreen)
     }
 }
 
