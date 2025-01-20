@@ -36,6 +36,7 @@ struct GameView: View {
         .onReceive(globalData.timer) { _ in
             if globalData.currentScreen == .game {
                 
+                globalData.replenishFrames()
                 globalData.moveEntities()
                 
                 globalData.pushPlayersFromWalls()

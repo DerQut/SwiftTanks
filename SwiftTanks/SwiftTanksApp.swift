@@ -130,7 +130,13 @@ class GlobalData: ObservableObject {
         let player = self.getPlayers()[id]
         
         do {
+            let rechargeTime = try player.getRechargeTime()
+            print("RT: \(rechargeTime.description), AF: \(player.accumulatedFrames)")
+            if player.accumulatedFrames < rechargeTime {
+                return
+            }
             try self.bullets.append(player.createBullet())
+            player.accumulatedFrames -= rechargeTime
         } catch EngineError.missingBulletFactory {
             print("Missing bullet factory for player with id \(id)")
         } catch {
@@ -177,6 +183,10 @@ class GlobalData: ObservableObject {
                 }
             }
         }
+    }
+    
+    func replenishFrames() {
+        self.getPlayers().filter {$0.accumulatedFrames < 240}.forEach {$0.accumulatedFrames += 1}
     }
     
     func destroyBulletsTouchingOtherBullets() {

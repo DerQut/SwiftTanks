@@ -41,7 +41,6 @@ struct JoyStickView: View {
                 let newY = location.y + sin(angle) * clampedDistance
                 
                 innerCircleLocation = CGPoint(x: newX, y: newY)
-                print(angleText)
                 
                 do {
                     try globalData.setAngle(Angle.degrees(Double(angleText) ?? 0), forPlayerWithID: self.playerDelegateID)

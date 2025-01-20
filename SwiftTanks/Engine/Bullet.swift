@@ -56,4 +56,15 @@ class BulletFactory {
             return Bullet(owner: owner, damage: 10, maxBounces: 1, size: 25, velocity: 8, position: owner.position, angle: owner.angle)
         }
     }
+    
+    func getRechargeTime(of bulletType: BulletType) -> Int {
+        switch bulletType {
+        case .bouncy:
+            return 150
+        case .fast:
+            return 80
+        default:
+            return 120
+        }
+    }
 }

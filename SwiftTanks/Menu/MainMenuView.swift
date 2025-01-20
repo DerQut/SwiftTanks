@@ -23,7 +23,6 @@ struct MainMenuView: View {
         }
         .animation(.default, value: globalData.currentScreen)
         .onReceive(globalData.timer) { _ in
-            print(globalData.playersReady)
             if globalData.playersReady == 2 {
                 globalData.startGame()
             }

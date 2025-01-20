@@ -33,6 +33,8 @@ class Player: Entity {
     let maxHealth: Double
     var health: Double
     
+    var accumulatedFrames: Int
+    
     init(type: PlayerType, bulletType: BulletType, color: Color, size: CGFloat, maxSpeed: Double, position: CGPoint, angle: Angle, maxHealth: Double) {
         self.type = type
         self.bulletType = bulletType
@@ -45,6 +47,8 @@ class Player: Entity {
         self.velocity = 0.0
         self.size = size
         
+        self.accumulatedFrames = 0
+        
         self.bulletFactory = BulletFactory()
     }
     
@@ -53,6 +57,13 @@ class Player: Entity {
             return self.bulletFactory!.createBullet(owner: self)
         }
         throw EngineError.missingBulletFactory
+    }
+    
+    func getRechargeTime() throws -> Int {
+        if self.bulletFactory == nil {
+            throw EngineError.missingBulletFactory
+        }
+        return self.bulletFactory!.getRechargeTime(of: self.bulletType)
     }
     
 }
