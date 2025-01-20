@@ -14,6 +14,10 @@ struct PlayerControlView: View {
     let forceAngleOffset: CGFloat
     let playerDelegateID: Int
     
+    var player: Player {
+        return globalData.players[playerDelegateID]
+    }
+    
     public var body: some View {
         ZStack {
             Color(.gray)
@@ -28,10 +32,10 @@ struct PlayerControlView: View {
                 
                 Spacer()
                 
-                ProgressView(value: globalData.players[playerDelegateID].health, total: globalData.players[playerDelegateID].maxHealth)
-                    .frame(width: globalData.players[playerDelegateID].maxHealth)
+                ProgressView(value: player.health, total: player.maxHealth)
+                    .frame(width: player.maxHealth)
                     .scaleEffect(x: 3, y: 15)
-                    .tint(globalData.players[self.playerDelegateID].color)
+                    .tint(player.color)
 
                 
                 Spacer()
