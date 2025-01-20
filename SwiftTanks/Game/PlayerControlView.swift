@@ -54,6 +54,7 @@ struct PlayerControlView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(globalData.getPlayers()[playerDelegateID].color)
                 .padding()
+                .scaleEffect(1.2)
                 .offset(x: -50)
                 
             }

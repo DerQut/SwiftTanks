@@ -46,8 +46,10 @@ struct PlayerCreationView: View {
                     .background(Color.white)
                 
                 HStack {
-                    Text("Tank type:")
-                    Spacer()
+                    HStack {
+                        Text("Tank type:")
+                        Spacer()
+                    }.frame(width: 100)
 
                     Picker("", selection: $pickedTankType) {
                         ForEach(PlayerType.allCases, id: \.self) { type in
@@ -59,8 +61,10 @@ struct PlayerCreationView: View {
                 }
                 
                 HStack {
-                    Text("Bullet type:")
-                    Spacer()
+                    HStack {
+                        Text("Bullet type:")
+                        Spacer()
+                    }.frame(width: 100)
 
                     Picker("", selection: $pickedBulletType) {
                         ForEach(BulletType.allCases, id: \.self) { type in
