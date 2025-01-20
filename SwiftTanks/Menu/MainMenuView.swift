@@ -14,17 +14,16 @@ struct MainMenuView: View {
             PlayerCreationView(playerDelegateID: 0)
                 .rotationEffect(.degrees(90))
                 .environmentObject(globalData)
-                .scaledToFit()
-                .offset(x: globalData.currentScreen == .mainMenu ? 0 : -1000)
+                .offset(x: globalData.currentScreen != .game ? 50 : -1000)
                         
             PlayerCreationView(playerDelegateID: 1)
                 .rotationEffect(.degrees(-90))
                 .environmentObject(globalData)
-                .scaledToFit()
-                .offset(x: globalData.currentScreen == .mainMenu ? 0 : 1000)
+                .offset(x: globalData.currentScreen != .game ? -50 : 1000)
         }
         .animation(.default, value: globalData.currentScreen)
         .onReceive(globalData.timer) { _ in
+            print(globalData.playersReady)
             if globalData.playersReady == 2 {
                 globalData.startGame()
             }

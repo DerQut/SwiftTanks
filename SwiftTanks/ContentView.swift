@@ -14,15 +14,21 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             
-            switch globalData.currentScreen {
-            case .mainMenu:
-                MainMenuView()
-                    .environmentObject(globalData)
-            case .game:
-                GameView()
-            case .victoryScreen:
-                VictoryScreenView()
-            }
+            GameView()
+                .environmentObject(globalData)
+            
+            Color(.black)
+                .opacity(globalData.currentScreen == .game ? 0 : 1)
+                .ignoresSafeArea()
+            
+            MainMenuView()
+                .environmentObject(globalData)
+                .opacity(globalData.currentScreen == .mainMenu ? 1 : 0)
+            
+            VictoryScreenView()
+                .environmentObject(globalData)
+                .opacity(globalData.currentScreen == .victoryScreen ? 1 : 0)
+            
         }
         .animation(.default, value: globalData.currentScreen)
     }

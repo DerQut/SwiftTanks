@@ -18,7 +18,7 @@ struct PlayerCreationView: View {
     
     @State var isReady: Bool = false
     
-    var playerDelegateID: Int
+    let playerDelegateID: Int
     var player: Player {
         return globalData.players[playerDelegateID]
     }
@@ -84,7 +84,7 @@ struct PlayerCreationView: View {
             .padding()
             .scaledToFit()
             .animation(.default, value: isReady)
-            .onDisappear {
+            .onChange(of: globalData.currentScreen) {
                 self.isReady = false
             }
             .onChange(of: isReady) {
@@ -95,9 +95,13 @@ struct PlayerCreationView: View {
                     
                     globalData.playersReady += 1
                 } else {
-                    globalData.playersReady -= 1
+                    if globalData.playersReady > 0 {
+                        globalData.playersReady -= 1
+                    } else {
+                        globalData.playersReady = 0
+                    }
                 }
             }
-        }
+        }.frame(width: 720, height: 560)
     }
 }
