@@ -66,7 +66,7 @@ class PlayerFactory {
         
         switch type {
         case .fast:
-            player = Player(type: type, bulletType: bulletType, color: color, size: 50, maxSpeed: 2, position: position, angle: angle, maxHealth: 100)
+            player = Player(type: type, bulletType: bulletType, color: color, size: 50, maxSpeed: 2, position: position, angle: angle, maxHealth: 80)
         case .tanky:
             player = Player(type: type, bulletType: bulletType, color: color, size: 60,  maxSpeed: 1, position: position, angle: angle, maxHealth: 150)
         default:
